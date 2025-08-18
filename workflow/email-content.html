@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Email Content Generator</title>
+
+    <!-- Favicons -->
+    <link href="../assets/img/favicon.png" rel="icon">
+    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+
+    <!-- Custom Styles for Main Section -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f7f9fc;
+            padding-top: 80px;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            color: #1e2a78;
+            margin-bottom: 30px;
+        }
+
+        #promptForm input {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #promptForm button {
+            padding: 12px 50px;
+            border-radius: 10px;
+            font-weight: 500;
+            background: #1e2a78;
+            border: none;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        #promptForm button:hover {
+            background: #3746b2;
+        }
+
+        #emailContent {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            white-space: pre-wrap;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        nav#navmenu>ul>li>a {
+            color: black;
+        }
+    </style>
+</head>
+
+<body class="email-content">
+
+    <!-- Header -->
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+            <a href="D:\Programming\N8n\A\AI N8n Bot\index.html" class="logo d-flex align-items-center">
+                <h1 class="sitename">Devin</h1>
+            </a>
+
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="#hero" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="main">
+        <section id="hero" class="mt-5 section hero-section">
+            <div class="container mt-3">
+                <div class="row justify-content-center">
+                    <div class="col-10 text-center">
+
+                        <h1>Helps you create personalized and effective cold emails</h1>
+
+                        <!-- Form -->
+                        <form id="promptForm" class="mb-3">
+                            <input type="text" name="prompt" placeholder="Enter your prompt here…"
+                                class="form-control mb-3" required>
+                            <button id="gbtn" type="submit">Generate Now</button>
+                        </form>
+
+                        <!-- Output -->
+                        <div id="emailContent" style="text-align: justify;"></div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+    <!-- Main JS File -->
+    <script src="../assets/js/main.js"></script>
+
+    <!-- JavaScript for Fetch -->
+    <script>
+        document.getElementById("promptForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const prompt = form.prompt.value;
+            const gbtn = document.getElementById("gbtn");
+
+
+            const outputDiv = document.getElementById("emailContent");
+            gbtn.textContent = "Generating email..."; // loader text
+
+            try {
+                const response = await fetch("http://56.228.12.21:5678/webhook/84b65e79-9047-43b4-b63e-2b60ea76e65c", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                const data = await response.json();
+                outputDiv.textContent = data[0].output;
+                gbtn.textContent = "Done";
+
+            } catch (error) {
+                console.error("Error sending to n8n:", error);
+                outputDiv.textContent = "Something went wrong!";
+                gbtn.textContent = "Try Again";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
