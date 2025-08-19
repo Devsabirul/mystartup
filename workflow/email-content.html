@@ -158,7 +158,7 @@
             gbtn.textContent = "Generating email..."; // loader text
 
             try {
-                const response = await fetch("http://56.228.12.21:5678/webhook/84b65e79-9047-43b4-b63e-2b60ea76e65c", {
+                const response = await fetch("https://n8n.wowvaiya.shop/webhook/84b65e79-9047-43b4-b63e-2b60ea76e65c", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prompt: prompt })
